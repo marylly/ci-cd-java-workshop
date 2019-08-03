@@ -1,0 +1,67 @@
+plugins {
+    id 'findbugs'
+    id 'jacoco'
+    id 'java'
+    id 'maven-publish'
+    id 'pmd'
+    id 'checkstyle'
+}
+
+repositories {
+    mavenLocal()
+    maven {
+        url = 'http://repo.maven.apache.org/maven2'
+    }
+}
+
+group = 'com.emailService'
+version = '0.0.1-SNAPSHOT'
+description = 'emailService'
+sourceCompatibility = '1.8'
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-activemq:2.1.5.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-web:2.1.5.RELEASE'
+    testCompile 'org.springframework.boot:spring-boot-starter-test:2.1.5.RELEASE'
+}
+
+jacoco {
+    toolVersion = "0.8.4"
+    reportsDir = file("./target/site/jacoco")
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.destination file("./target/site/jacoco")
+    }
+}
+
+test {
+    jacoco {
+        println '[COVERAGE] Executing verifications...'
+        destinationFile = file("./target/jacoco.exec")
+        classDumpDir = file("./target/jacoco")
+    }
+}
+
+findbugs {
+    println '[FINDBUGS] Executing verifications...'
+    ignoreFailures = false
+    effort = "max"
+    reportLevel = "high"
+}
+
+pmd {
+    println '[PMD] Executing verifications...'
+    toolVersion = '5.5.2'
+    ignoreFailures = false
+}
+
+checkstyle {
+    println '[CHECKSTYLE] Executing verifications...'
+    sourceSets = []
+    showViolations = true
+    toolVersion = "8.23"
+}
